@@ -1,7 +1,5 @@
 require "capybara_angular_helpers/version"
-
-# https://github.com/ConradIrwin/pry-rescue/commit/b03b3db680430473ef37bd823bbff48f2dcec5c5
-require 'rspec' unless defined?(RSpec)
+require 'rspec/core'
 
 module CapybaraAngularHelpers
   def ng_fill_in(target, opts)
