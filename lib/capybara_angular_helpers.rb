@@ -11,7 +11,7 @@ module CapybaraAngularHelpers
       opts = { with: opts }
     end
 
-    selector = "input[ng-model='#{target}']"
+    selector = "input[ng-model='#{target}'], textarea[ng-model='#{target}']"
 
     if element_index = opts[:index]
       page_element = all(selector)[element_index]
@@ -22,7 +22,7 @@ module CapybaraAngularHelpers
         raise "#{target} could not be found"
       end
     else
-      find(selector).set(opts[:with])
+      find(:css, selector).set(opts[:with])
     end
   end
 
