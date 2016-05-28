@@ -1,5 +1,5 @@
 require "capybara_angular_helpers/version"
-require 'rspec/core'
+require 'rspec/rails' unless defined?(RSpec)
 
 module CapybaraAngularHelpers
   def ng_fill_in(target, opts)
@@ -11,18 +11,24 @@ module CapybaraAngularHelpers
       opts = { with: opts }
     end
 
-    selector = "input[ng-model='#{target}'], textarea[ng-model='#{target}']"
+    selector = "input[ng-model='#{target}']," +
+               "textarea[ng-model='#{target}']," +
+               "select[ng-model='#{target}']"
 
     if element_index = opts[:index]
-      page_element = all(selector)[element_index]
+      target_element = all(selector)[element_index]
 
-      if page_element
-        page_element.set(opts[:with])
-      else
+      if !target_element
         raise "#{target} could not be found"
       end
     else
-      find(:css, selector).set(opts[:with])
+      target_element = find(:css, selector)
+    end
+
+    if target_element.tag_name == 'select'
+      target_element.find(:option, opts[:with]).select_option
+    else
+      target_element.set(opts[:with])
     end
   end
 
@@ -57,5 +63,5 @@ module CapybaraAngularHelpers
 end
 
 RSpec.configure do |config|
-  config.include CapybaraAngularHelpers
+  config.include CapybaraAngularHelpers, type: :feature
 end
