@@ -1,5 +1,5 @@
 require "capybara_angular_helpers/version"
-require 'rspec/rails' unless defined?(RSpec)
+require 'rspec/core'
 
 module CapybaraAngularHelpers
   def ng_fill_in(target, opts)
