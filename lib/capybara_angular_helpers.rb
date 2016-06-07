@@ -32,16 +32,21 @@ module CapybaraAngularHelpers
     end
   end
 
-  def ng_click_on(target)
-    begin
-      find('*[ui-sref]', text: target)
-    rescue Capybara::ElementNotFound
-      begin
-        find('*[ng-click]', text: target)
-      rescue Capybara::ElementNotFound
-        find('button', text: target)
-      end
-    end.click
+  def ng_click_on(target, opts = {})
+    selector = '*[ui-sref],' +
+               '*[ng-click],' +
+               'button'
+   if element_index = opts[:index]
+     target_element = all(selector, text: target)[element_index]
+
+     if !target_element
+       raise "#{target} could not be found"
+     end
+   else
+     target_element = find(:css, selector, text: target)
+   end
+
+   target_element.click
   end
 
   def ng_ionic_click_left_nav
