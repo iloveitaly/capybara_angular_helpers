@@ -35,6 +35,7 @@ module CapybaraAngularHelpers
   def ng_click_on(target, opts = {})
     selector = '*[ui-sref],' +
                '*[ng-click],' +
+               '*[menu-toggle],' + 
                'button'
    if element_index = opts[:index]
      target_element = all(selector, text: target)[element_index]
