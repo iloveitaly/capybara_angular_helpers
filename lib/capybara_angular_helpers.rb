@@ -11,9 +11,11 @@ module CapybaraAngularHelpers
       opts = { with: opts }
     end
 
-    selector = "input[ng-model='#{target}']," +
-               "textarea[ng-model='#{target}']," +
-               "select[ng-model='#{target}']"
+    selector = [
+      "input[ng-model='#{target}']",
+      "textarea[ng-model='#{target}']",
+      "select[ng-model='#{target}']"
+    ].join(',')
 
     if element_index = opts[:index]
       target_element = all(selector)[element_index]
@@ -33,10 +35,14 @@ module CapybaraAngularHelpers
   end
 
   def ng_click_on(target, opts = {})
-    selector = '*[ui-sref],' +
-               '*[ng-click],' +
-               '*[menu-toggle],' + 
-               'button'
+    selector = [
+    '*[ui-sref]',
+    '*[ng-click]',
+    '*[menu-toggle]',
+    '.tab-item',
+    'button'
+  ].join(',')
+
    if element_index = opts[:index]
      target_element = all(selector, text: target)[element_index]
 
@@ -51,7 +57,13 @@ module CapybaraAngularHelpers
   end
 
   def ng_ionic_click_left_nav
-    find('ion-header-bar .buttons-left button').click
+    left_nav_button = begin
+      find('ion-header-bar .buttons-left button')
+    rescue Capybara::ElementNotFound
+      find('ion-header-bar .back-button')
+    end
+
+    left_nav_button.click
   end
 
   def ng_ionic_click_right_nav
