@@ -7,14 +7,14 @@ module CapybaraAngularHelpers
       opts = opts.to_s
     end
 
-    if opts.is_a?(String)
+    if opts.is_a?(String) || opts.is_a?(TrueClass) || opts.is_a?(FalseClass)
       opts = { with: opts }
     end
 
     selector = [
       "input[ng-model='#{target}']",
       "textarea[ng-model='#{target}']",
-      "select[ng-model='#{target}']"
+      "select[ng-model='#{target}']",
     ].join(',')
 
     if element_index = opts[:index]
@@ -34,14 +34,18 @@ module CapybaraAngularHelpers
     end
   end
 
+  def ng_toggle(target)
+    find(:css, "div[ng-model='#{target}'] .toggle").click
+  end
+
   def ng_click_on(target, opts = {})
     selector = [
-    '*[ui-sref]',
-    '*[ng-click]',
-    '*[menu-toggle]',
-    '.tab-item',
-    'button'
-  ].join(',')
+      '*[ui-sref]',
+      '*[ng-click]',
+      '*[menu-toggle]',
+      '.tab-item',
+      'button',
+    ].join(',')
 
    if element_index = opts[:index]
      target_element = all(selector, text: target)[element_index]
